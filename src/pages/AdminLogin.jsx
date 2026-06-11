@@ -73,7 +73,7 @@ export default function AdminLogin() {
         </form>
 
         <p className="login-hint">
-          Set up admin credentials via Supabase Auth.
+          Made by Saumya Chitrakar 2026.
         </p>
       </div>
     </div>
