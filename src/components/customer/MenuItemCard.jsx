@@ -1,8 +1,14 @@
 import './MenuItemCard.css';
 
-export default function MenuItemCard({ item, onAdd, loading, style }) {
+export default function MenuItemCard({ item, onAdd, onView, loading, style, quantity = 1, onQuantityChange }) {
   return (
-    <div className="menu-item-card animate-fade-in-up" style={style}>
+    <div 
+      className="menu-item-card animate-fade-in-up" 
+      style={style}
+      onClick={onView}
+      role="button"
+      tabIndex={0}
+    >
       {item.image_url && (
         <div className="menu-item-img-wrap">
           <img
@@ -20,15 +26,38 @@ export default function MenuItemCard({ item, onAdd, loading, style }) {
         )}
         <div className="menu-item-footer">
           <span className="menu-item-price">Rs.{parseFloat(item.price).toFixed(2)}</span>
-          <button
-            className={`add-btn ${loading ? 'loading' : ''}`}
-            onClick={() => !loading && onAdd(item)}
-            disabled={loading}
-            id={`add-item-${item.id}`}
-            aria-label={`Add ${item.name}`}
-          >
-            {loading ? '...' : '+'}
-          </button>
+          <div className="menu-item-actions" onClick={e => e.stopPropagation()}>
+            {onQuantityChange && (
+              <div className="card-qty-selector">
+                <button
+                  className="card-qty-btn"
+                  onClick={() => onQuantityChange(quantity - 1)}
+                  disabled={quantity <= 1}
+                >
+                  -
+                </button>
+                <span className="card-qty-display">{quantity}</span>
+                <button
+                  className="card-qty-btn"
+                  onClick={() => onQuantityChange(quantity + 1)}
+                  disabled={quantity >= 10}
+                >
+                  +
+                </button>
+              </div>
+            )}
+            <button
+              className={`add-btn ${loading ? 'loading' : ''}`}
+              onClick={() => {
+                if (!loading) onAdd(item);
+              }}
+              disabled={loading}
+              id={`add-item-${item.id}`}
+              aria-label={`Add ${item.name}`}
+            >
+              {loading ? '...' : '+'}
+            </button>
+          </div>
         </div>
       </div>
     </div>

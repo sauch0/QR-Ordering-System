@@ -105,3 +105,52 @@
 .add-btn:disabled {
   cursor: not-allowed;
 }
+
+.menu-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-qty-selector {
+  display: flex;
+  align-items: center;
+  background: var(--bg-elevated);
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  padding: 2px;
+  height: 30px;
+}
+
+.card-qty-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-primary);
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.card-qty-btn:hover:not(:disabled) {
+  background: var(--bg-secondary);
+}
+
+.card-qty-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.card-qty-display {
+  min-width: 20px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}

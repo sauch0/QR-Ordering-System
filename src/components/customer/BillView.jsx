@@ -9,7 +9,7 @@ const STATUS_LABEL = {
 };
 
 export default function BillView() {
-  const { order, activeItems, totalAmount, loading } = useOrder();
+  const { order, activeItems, totalAmount, loading, isOrderPlaced } = useOrder();
 
   if (loading) {
     return (
@@ -26,6 +26,17 @@ export default function BillView() {
         <div className="bill-paid-icon">✅</div>
         <h2>Bill Paid!</h2>
         <p>Thank you for dining with us. Come again soon!</p>
+      </div>
+    );
+  }
+
+  // Only show the bill if the order has been placed
+  if (!isOrderPlaced) {
+    return (
+      <div className="empty-state" style={{ paddingTop: 60 }}>
+        <div className="empty-state-icon">📋</div>
+        <h3>Place Your Order First</h3>
+        <p>Please place your order from the menu before viewing the bill.</p>
       </div>
     );
   }

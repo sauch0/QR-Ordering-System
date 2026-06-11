@@ -9,6 +9,8 @@ export function OrderProvider({ tableId, children }) {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isOrderPlaced, setIsOrderPlaced] = useState(false);
+  const [localCart, setLocalCart] = useState([]);
 
   const refreshOrder = useCallback(async () => {
     if (!tableId) return;
@@ -20,7 +22,7 @@ export function OrderProvider({ tableId, children }) {
     } catch (err) {
       setError(err.message);
     }
-  }, [tableId, order?.id]);
+  }, [tableId, order]);
 
   // Initial load: Only check for existing open order (don't auto-create)
   useEffect(() => {
@@ -54,46 +56,79 @@ export function OrderProvider({ tableId, children }) {
   }, [order?.id]);
 
   const addItem = useCallback(async (menuItem, quantity = 1) => {
-    try {
-      let currentOrder = order;
-      if (!currentOrder) {
-        // Create the active order row in the database on demand when the first item is added
-        currentOrder = await getOrCreateActiveOrder(tableId);
-        setOrder(currentOrder);
+    setLocalCart(prev => {
+      const existing = prev.find(i => i.menu_item.id === menuItem.id);
+      if (existing) {
+        return prev.map(i => i.menu_item.id === menuItem.id ? { ...i, quantity: i.quantity + quantity } : i);
       }
-      await addOrderItem(currentOrder.id, menuItem.id, quantity, menuItem.price);
-      const updated = await getOrderById(currentOrder.id);
-      setOrder(updated);
-    } catch (err) {
-      setError(err.message);
-    }
-  }, [order, tableId]);
+      return [...prev, {
+        id: `local-${Date.now()}-${Math.random()}`,
+        menu_item: menuItem,
+        quantity,
+        unit_price: menuItem.price,
+        status: 'local_cart'
+      }];
+    });
+  }, []);
 
   const removeItem = useCallback(async (orderItemId) => {
+    if (String(orderItemId).startsWith('local-')) {
+      setLocalCart(prev => prev.filter(i => i.id !== orderItemId));
+      return;
+    }
     await removeOrderItem(orderItemId);
     const updated = await getOrderById(order.id);
     setOrder(updated);
   }, [order?.id]);
 
   const deleteItem = useCallback(async (orderItemId) => {
+    if (String(orderItemId).startsWith('local-')) {
+      setLocalCart(prev => prev.filter(i => i.id !== orderItemId));
+      return;
+    }
     await deleteOrderItem(orderItemId);
     const updated = await getOrderById(order.id);
     setOrder(updated);
   }, [order?.id]);
 
   const updateQuantity = useCallback(async (orderItemId, quantity) => {
+    if (String(orderItemId).startsWith('local-')) {
+      if (quantity <= 0) {
+        setLocalCart(prev => prev.filter(i => i.id !== orderItemId));
+      } else {
+        setLocalCart(prev => prev.map(i => i.id === orderItemId ? { ...i, quantity } : i));
+      }
+      return;
+    }
     await updateOrderItemQuantity(orderItemId, quantity);
     const updated = await getOrderById(order.id);
     setOrder(updated);
   }, [order?.id]);
 
+  const placeOrder = useCallback(async () => {
+    if (localCart.length === 0) return;
+    try {
+      let currentOrder = order;
+      if (!currentOrder) {
+        currentOrder = await getOrCreateActiveOrder(tableId);
+      }
+      for (const item of localCart) {
+        await addOrderItem(currentOrder.id, item.menu_item.id, item.quantity, item.unit_price);
+      }
+      const updated = await getOrderById(currentOrder.id);
+      setOrder(updated);
+      setLocalCart([]);
+      setIsOrderPlaced(true);
+    } catch (err) {
+      setError(err.message);
+    }
+  }, [localCart, order, tableId]);
+
   const payOrder = useCallback(async () => {
     if (!order?.id) return;
     await markOrderAsPaid(order.id);
-    // Order marked paid — refresh
     const updated = await getOrderById(order.id);
     setOrder(updated);
-    // Expire session
     Object.keys(sessionStorage).forEach(key => {
       if (key.startsWith('table_scanned_')) {
         sessionStorage.removeItem(key);
@@ -101,7 +136,8 @@ export function OrderProvider({ tableId, children }) {
     });
   }, [order?.id]);
 
-  const activeItems = order?.order_items?.filter(i => i.status !== 'removed') ?? [];
+  const dbActiveItems = order?.order_items?.filter(i => i.status !== 'removed') ?? [];
+  const activeItems = [...localCart, ...dbActiveItems];
   const totalAmount = activeItems.reduce((sum, i) => sum + i.unit_price * i.quantity, 0);
 
   return (
@@ -109,7 +145,7 @@ export function OrderProvider({ tableId, children }) {
       order, loading, error,
       activeItems, totalAmount,
       addItem, removeItem, deleteItem, updateQuantity, payOrder,
-      refreshOrder,
+      refreshOrder, isOrderPlaced, placeOrder
     }}>
       {children}
     </OrderContext.Provider>

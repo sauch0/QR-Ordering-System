@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { OrderProvider } from '../context/OrderContext';
 import { getTableByNumber } from '../services/tableService';
 import MenuView from '../components/customer/MenuView';
-import BillView from '../components/customer/BillView';
+import OrderList from '../components/customer/OrderList';
 import TableHeader from '../components/customer/TableHeader';
 import './CustomerPage.css';
 
@@ -101,20 +101,20 @@ export default function CustomerPage() {
             🍽️ Menu
           </button>
           <button
-            className={`tab-btn ${activeTab === 'bill' ? 'active' : ''}`}
-            onClick={() => setActiveTab('bill')}
-            id="tab-bill"
+            className={`tab-btn ${activeTab === 'orders' ? 'active' : ''}`}
+            onClick={() => setActiveTab('orders')}
+            id="tab-orders"
           >
-            🧾 My Bill
+            🛒 My Orders
           </button>
         </div>
 
         {/* Content */}
         <div className="customer-content">
           {activeTab === 'menu' ? (
-            <MenuView onViewBill={() => setActiveTab('bill')} />
+            <MenuView onViewBill={() => setActiveTab('orders')} />
           ) : (
-            <BillView />
+            <OrderList />
           )}
         </div>
       </div>
