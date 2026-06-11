@@ -1,0 +1,59 @@
+.customer-page {
+  background: var(--bg-primary);
+  position: relative;
+}
+
+.customer-bg-gradient {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 480px;
+  height: 300px;
+  background: radial-gradient(ellipse at top, rgba(249, 115, 22, 0.12), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Tab Navigation */
+.tab-nav {
+  display: flex;
+  margin: 0 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 4px;
+  gap: 4px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: transparent;
+  transition: all 0.25s ease;
+}
+
+.tab-btn.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: var(--shadow-accent);
+}
+
+.tab-btn:not(.active):hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+.customer-content {
+  position: relative;
+  z-index: 1;
+  padding-bottom: 100px;
+}
