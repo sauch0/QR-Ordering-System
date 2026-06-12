@@ -111,7 +111,7 @@ export default function MenuView({ onViewBill }) {
           onClick={onViewBill}
           id="view-bill-btn"
         >
-          <span>🛒</span>
+          {/* <span>🛒</span> */}
           <span>View Orders</span>
           <span className="floating-bill-count">{activeItems.length}</span>
         </button>
@@ -149,7 +149,7 @@ export default function MenuView({ onViewBill }) {
                     +
                   </button>
                 </div>
-                <button 
+                <button
                   className="add-to-cart-btn"
                   onClick={() => {
                     handleAddItem(selectedItem);

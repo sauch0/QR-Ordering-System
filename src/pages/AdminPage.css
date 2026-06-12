@@ -87,7 +87,23 @@
 }
 
 /* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .admin-header-inner {
+    padding: 0 12px;
+  }
+  .admin-nav {
+    gap: 2px;
+  }
+  .admin-nav-link {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+}
+
 @media (max-width: 600px) {
   .admin-brand-name { display: none; }
-  .admin-nav-link { font-size: 12px; padding: 6px 10px; }
+  .admin-brand-badge { display: none; }
+  .admin-nav-link { font-size: 12px; padding: 6px 8px; }
+  .admin-header-inner { gap: 8px; padding: 0 12px; }
+  .admin-main { padding: 16px 0; }
 }

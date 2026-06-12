@@ -55,7 +55,7 @@ export default function MenuItemCard({ item, onAdd, onView, loading, style, quan
               id={`add-item-${item.id}`}
               aria-label={`Add ${item.name}`}
             >
-              {loading ? '...' : '+'}
+              {loading ? 'Adding...' : 'Add to Orders'}
             </button>
           </div>
         </div>

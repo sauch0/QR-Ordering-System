@@ -98,14 +98,14 @@ export default function CustomerPage() {
             onClick={() => setActiveTab('menu')}
             id="tab-menu"
           >
-            🍽️ Menu
+            Menu
           </button>
           <button
             className={`tab-btn ${activeTab === 'orders' ? 'active' : ''}`}
             onClick={() => setActiveTab('orders')}
             id="tab-orders"
           >
-            🛒 My Orders
+            My Orders
           </button>
         </div>
 

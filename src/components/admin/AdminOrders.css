@@ -158,3 +158,33 @@
   font-weight: 800;
   color: var(--accent-light);
 }
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .admin-section-header {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .order-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .order-card-actions {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+  
+  .order-item-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  
+  .order-item-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

@@ -52,8 +52,7 @@ export default function OrderList({ onOrderPlaced }) {
   if (activeItems.length === 0) {
     return (
       <div className="order-list-empty" style={{ paddingTop: '60px' }}>
-        <div className="empty-state-icon">🛒</div>
-        <h3>Your cart is empty</h3>
+        <h3>Your order list is empty</h3>
         <p>Add items from the menu to get started</p>
       </div>
     );
@@ -64,18 +63,18 @@ export default function OrderList({ onOrderPlaced }) {
 
   return (
     <div className="order-list animate-fade-in">
-      
+
       {cartItems.length > 0 && (
         <div className="order-section">
-          <h2>Cart (Not Placed Yet)</h2>
+          <h2>Your Orders (Not Placed Yet)</h2>
           <div className="order-items">
             {cartItems.map((item) => (
               <div key={item.id} className="order-item">
                 {item.menu_item?.image_url && (
-                  <img 
-                    src={item.menu_item.image_url} 
-                    alt={item.menu_item.name} 
-                    className="order-item-img" 
+                  <img
+                    src={item.menu_item.image_url}
+                    alt={item.menu_item.name}
+                    className="order-item-img"
                   />
                 )}
                 <div className="order-item-content">
@@ -104,7 +103,7 @@ export default function OrderList({ onOrderPlaced }) {
                       onClick={() => removeItem(item.id)}
                       aria-label="Remove item"
                     >
-                      🗑️
+                      ❌
                     </button>
                   </div>
                 </div>
@@ -131,10 +130,10 @@ export default function OrderList({ onOrderPlaced }) {
               return (
                 <div key={item.id} className="order-item placed-item">
                   {item.menu_item?.image_url && (
-                    <img 
-                      src={item.menu_item.image_url} 
-                      alt={item.menu_item.name} 
-                      className="order-item-img" 
+                    <img
+                      src={item.menu_item.image_url}
+                      alt={item.menu_item.name}
+                      className="order-item-img"
                     />
                   )}
                   <div className="order-item-content">

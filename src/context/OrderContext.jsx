@@ -48,9 +48,19 @@ export function OrderProvider({ tableId, children }) {
                 sessionStorage.removeItem(key);
               }
             });
+            window.location.reload();
           }
         })
-        .catch(console.error);
+        .catch(err => {
+          console.error(err);
+          // If the order was deleted (or not found), expire session and reload
+          Object.keys(sessionStorage).forEach(key => {
+            if (key.startsWith('table_scanned_')) {
+              sessionStorage.removeItem(key);
+            }
+          });
+          window.location.reload();
+        });
     });
     return () => unsubscribe(channel);
   }, [order?.id]);
