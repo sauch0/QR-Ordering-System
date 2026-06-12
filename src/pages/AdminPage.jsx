@@ -41,8 +41,8 @@ export default function AdminPage() {
 
   if (!user) return null;
 
-  if (user.email === 'guest@restaurant.com') {
-    return <Navigate to="/guest" replace />;
+  if (user.email === import.meta.env.VITE_STAFF_EMAIL) {
+    return <Navigate to="/staff" replace />;
   }
 
   return (

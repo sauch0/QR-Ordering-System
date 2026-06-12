@@ -31,8 +31,8 @@ export default function AdminLogin() {
       <div className="login-card animate-fade-in-up">
         <div className="login-logo">
           <div className="login-logo-icon">🍽️</div>
-          <h1>QR Ordering</h1>
-          <p>Admin Portal</p>
+          <h1>QR Ordering System</h1>
+          <p>Sign In using your admin/staff credentials.</p>
         </div>
 
         <form onSubmit={handleLogin} className="login-form">
@@ -42,7 +42,7 @@ export default function AdminLogin() {
               id="email"
               type="email"
               className="form-input"
-              placeholder="admin@restaurant.com"
+              placeholder="example@restaurant.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

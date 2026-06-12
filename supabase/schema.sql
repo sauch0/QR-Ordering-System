@@ -178,3 +178,30 @@ insert into menu_items (category_id, name, description, price, image_url) values
 alter publication supabase_realtime add table orders;
 alter publication supabase_realtime add table order_items;
 alter publication supabase_realtime add table menu_items;
+
+-- ============================================
+-- WAITER CALLS (Staff notifications)
+-- ============================================
+
+-- Waiter call requests from customers
+create table waiter_calls (
+  id uuid primary key default uuid_generate_v4(),
+  table_id uuid references tables(id) on delete cascade not null,
+  resolved boolean default false,
+  created_at timestamptz default now()
+);
+
+-- Enable RLS
+alter table waiter_calls enable row level security;
+
+-- Customers (public/anon) can insert a waiter call
+create policy "Public insert waiter calls" on waiter_calls for insert with check (true);
+
+-- Anyone can read waiter calls (staff needs to see them)
+create policy "Public read waiter calls" on waiter_calls for select using (true);
+
+-- Authenticated users (staff/admin) can update (resolve) calls
+create policy "Auth update waiter calls" on waiter_calls for update using (auth.role() = 'authenticated');
+
+-- Enable realtime for instant staff notifications
+alter publication supabase_realtime add table waiter_calls;

@@ -60,3 +60,23 @@ export async function deleteTable(tableId) {
     .eq('id', tableId);
   if (error) throw error;
 }
+
+// ─── WAITER CALLS ──────────────────────────────────────────────
+
+export async function callWaiter(tableId) {
+  // Avoid duplicate unresolved calls for the same table
+  const { data: existing } = await supabase
+    .from('waiter_calls')
+    .select('id')
+    .eq('table_id', tableId)
+    .eq('resolved', false)
+    .maybeSingle();
+
+  if (existing) return; // already pending
+
+  const { error } = await supabase
+    .from('waiter_calls')
+    .insert({ table_id: tableId, resolved: false });
+  if (error) throw error;
+}
+

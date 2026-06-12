@@ -3,7 +3,7 @@ import { Toaster } from 'react-hot-toast';
 import CustomerPage from './pages/CustomerPage';
 import AdminPage from './pages/AdminPage';
 import AdminLogin from './pages/AdminLogin';
-import GuestPage from './pages/GuestPage';
+import StaffPage from './pages/StaffPage';
 import NotFound from './pages/NotFound';
 import './App.css';
 
@@ -32,7 +32,7 @@ function App() {
         {/* Admin routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/*" element={<AdminPage />} />
-        <Route path="/guest/*" element={<GuestPage />} />
+        <Route path="/staff/*" element={<StaffPage />} />
 
         {/* Redirects */}
         <Route path="/" element={<Navigate to="/admin/login" replace />} />

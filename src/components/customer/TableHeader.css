@@ -56,3 +56,53 @@
   font-weight: 600;
   color: var(--accent-light);
 }
+
+/* ── Table header right cluster ───────────────────────────── */
+.table-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* ── Call Waiter button ────────────────────────────────────── */
+.call-waiter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+  white-space: nowrap;
+}
+
+.call-waiter-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.5);
+}
+
+.call-waiter-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.call-waiter-btn.cooldown,
+.call-waiter-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: #475569;
+  box-shadow: none;
+}
+
+.call-waiter-btn.cooldown {
+  background: #10b981;
+  opacity: 1;
+}
+
