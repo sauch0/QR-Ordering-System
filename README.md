@@ -1,16 +1,60 @@
-# React + Vite
+# QR Ordering System 🍔📱
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive, and seamless QR-code-based food ordering system designed for restaurants, cafes, and bars. Built with **React**, **Vite**, and **Supabase**, this platform allows customers to scan a QR code at their table, browse a beautiful digital menu, and place orders directly from their phones.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### 👨‍🍳 Admin Dashboard
+- **Menu Management**: Easily add, edit, or delete menu items. Assign image URLs, prices, categories, and descriptions.
+- **Real-Time Orders**: Monitor incoming orders in real-time as customers place them from their tables.
+- **Order Processing**: Track orders by table number, calculate totals instantly, mark bills as "Paid," or delete canceled orders.
+- **Session Control**: Secure admin access with the ability to clear inactive table sessions.
 
-## React Compiler
+### 🍽️ Customer Interface
+- **Frictionless Ordering**: No app download required. Customers simply scan a table-specific QR code to begin.
+- **Beautiful Digital Menu**: A highly responsive, mobile-first menu grid. Easily filter items by category chips.
+- **Interactive Cart**: Select item quantities, view a floating cart with total bills in real-time, and place orders instantly.
+- **Modern UI**: Smooth animations, glassmorphism elements, and a dynamic interface tailored specifically for mobile usability.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tech Stack
 
-## Expanding the ESLint configuration
+- **Frontend**: React, Vite
+- **Styling**: Vanilla CSS (Custom properties, responsive flexbox/grid, modern UI aesthetics)
+- **Backend & Database**: Supabase (PostgreSQL) for real-time data syncing and table management.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (v18 or higher)
+- A Supabase account and project
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/sauch0/QR-Ordering-System.git
+   cd "QR - Ordering - System"
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Set up Environment Variables:**
+   Create a `.env` file in the root directory and add your Supabase credentials:
+   ```env
+   VITE_SUPABASE_URL=your_supabase_url_here
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
+   ```
+
+4. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open in browser:**
+   Navigate to `http://localhost:5173` to view the application locally.
+
+## 📱 Mobile Responsiveness
+The UI has been highly optimized for mobile devices. The menu dynamically scales from multi-column desktop views down to a crisp, two-column layout on smaller screens. Action buttons and quantity selectors automatically adjust their flexbox wrapping to prevent any text cropping or overlap on extremely narrow devices.
