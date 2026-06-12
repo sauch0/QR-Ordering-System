@@ -13,7 +13,7 @@ const EMPTY_CAT_FORM = {
   name: '', description: '', sortOrder: 0,
 };
 
-export default function AdminMenu() {
+export default function AdminMenu({ isGuest }) {
   const { items, categories, loading, refresh } = useMenu();
 
   // Item Modal State
@@ -216,12 +216,16 @@ export default function AdminMenu() {
           <p className="admin-section-sub">{items.length} items across {categories.length} categories</p>
         </div>
         <div className="admin-header-buttons">
-          <button className="btn btn-secondary" onClick={() => setShowCategoryModal(true)} id="manage-cats-btn">
-            📁 Manage Categories
-          </button>
-          <button className="btn btn-primary" onClick={openAdd} id="add-item-btn">
-            + Add Item
-          </button>
+          {!isGuest && (
+            <>
+              <button className="btn btn-secondary" onClick={() => setShowCategoryModal(true)} id="manage-cats-btn">
+                📁 Manage Categories
+              </button>
+              <button className="btn btn-primary" onClick={openAdd} id="add-item-btn">
+                + Add Item
+              </button>
+            </>
+          )}
         </div>
       </div>
 
@@ -455,31 +459,33 @@ export default function AdminMenu() {
                         {item.description && (
                           <p className="menu-admin-desc">{item.description}</p>
                         )}
-                        <div className="menu-admin-actions">
-                          <button
-                            className={`btn btn-sm ${item.is_available ? 'btn-ghost' : 'btn-success'}`}
-                            onClick={() => handleToggleAvailability(item)}
-                            disabled={processingId === item.id}
-                            id={`toggle-${item.id}`}
-                          >
-                            {item.is_available ? '🙈 Hide' : '👁 Show'}
-                          </button>
-                          <button
-                            className="btn btn-secondary btn-sm"
-                            onClick={() => openEdit(item)}
-                            id={`edit-${item.id}`}
-                          >
-                            ✏️ Edit
-                          </button>
-                          <button
-                            className="btn btn-danger btn-sm"
-                            onClick={() => handleDelete(item)}
-                            disabled={processingId === item.id}
-                            id={`delete-${item.id}`}
-                          >
-                            🗑️
-                          </button>
-                        </div>
+                        {!isGuest && (
+                          <div className="menu-admin-actions">
+                            <button
+                              className={`btn btn-sm ${item.is_available ? 'btn-ghost' : 'btn-success'}`}
+                              onClick={() => handleToggleAvailability(item)}
+                              disabled={processingId === item.id}
+                              id={`toggle-${item.id}`}
+                            >
+                              {item.is_available ? '🙈 Hide' : '👁 Show'}
+                            </button>
+                            <button
+                              className="btn btn-secondary btn-sm"
+                              onClick={() => openEdit(item)}
+                              id={`edit-${item.id}`}
+                            >
+                              ✏️ Edit
+                            </button>
+                            <button
+                              className="btn btn-danger btn-sm"
+                              onClick={() => handleDelete(item)}
+                              disabled={processingId === item.id}
+                              id={`delete-${item.id}`}
+                            >
+                              🗑️
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -510,31 +516,33 @@ export default function AdminMenu() {
                   {item.description && (
                     <p className="menu-admin-desc">{item.description}</p>
                   )}
-                  <div className="menu-admin-actions">
-                    <button
-                      className={`btn btn-sm ${item.is_available ? 'btn-ghost' : 'btn-success'}`}
-                      onClick={() => handleToggleAvailability(item)}
-                      disabled={processingId === item.id}
-                      id={`toggle-${item.id}`}
-                    >
-                      {item.is_available ? '🙈 Hide' : '👁 Show'}
-                    </button>
-                    <button
-                      className="btn btn-secondary btn-sm"
-                      onClick={() => openEdit(item)}
-                      id={`edit-${item.id}`}
-                    >
-                      ✏️ Edit
-                    </button>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDelete(item)}
-                      disabled={processingId === item.id}
-                      id={`delete-${item.id}`}
-                    >
-                      🗑️
-                    </button>
-                  </div>
+                  {!isGuest && (
+                    <div className="menu-admin-actions">
+                      <button
+                        className={`btn btn-sm ${item.is_available ? 'btn-ghost' : 'btn-success'}`}
+                        onClick={() => handleToggleAvailability(item)}
+                        disabled={processingId === item.id}
+                        id={`toggle-${item.id}`}
+                      >
+                        {item.is_available ? '🙈 Hide' : '👁 Show'}
+                      </button>
+                      <button
+                        className="btn btn-secondary btn-sm"
+                        onClick={() => openEdit(item)}
+                        id={`edit-${item.id}`}
+                      >
+                        ✏️ Edit
+                      </button>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleDelete(item)}
+                        disabled={processingId === item.id}
+                        id={`delete-${item.id}`}
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

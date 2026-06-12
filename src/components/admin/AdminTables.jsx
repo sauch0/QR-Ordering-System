@@ -3,7 +3,7 @@ import { getTables, createTable, deleteTable, updateTable } from '../../services
 import toast from 'react-hot-toast';
 import './AdminTables.css';
 
-export default function AdminTables() {
+export default function AdminTables({ isGuest }) {
   const [tables, setTables] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newTableNumber, setNewTableNumber] = useState('');
@@ -86,40 +86,42 @@ export default function AdminTables() {
       </div>
 
       {/* Add Table Form */}
-      <div className="card add-table-form">
-        <h3 className="add-table-title">Add New Table</h3>
-        <form onSubmit={handleAdd} className="add-table-row">
-          <div className="form-group" style={{ flex: '0 0 100px' }}>
-            <label className="form-label">Table #</label>
-            <input
-              type="number"
-              min="1"
-              className="form-input"
-              placeholder="e.g. 7"
-              value={newTableNumber}
-              onChange={e => setNewTableNumber(e.target.value)}
-              id="new-table-number"
-              required
-            />
-          </div>
-          <div className="form-group" style={{ flex: 1 }}>
-            <label className="form-label">Name (optional)</label>
-            <input
-              type="text"
-              className="form-input"
-              placeholder="e.g. Window Seat"
-              value={newTableName}
-              onChange={e => setNewTableName(e.target.value)}
-              id="new-table-name"
-            />
-          </div>
-          <div className="form-group" style={{ alignSelf: 'flex-end' }}>
-            <button type="submit" className="btn btn-primary" disabled={adding} id="add-table-btn">
-              {adding ? 'Adding...' : '+ Add'}
-            </button>
-          </div>
-        </form>
-      </div>
+      {!isGuest && (
+        <div className="card add-table-form">
+          <h3 className="add-table-title">Add New Table</h3>
+          <form onSubmit={handleAdd} className="add-table-row">
+            <div className="form-group" style={{ flex: '0 0 100px' }}>
+              <label className="form-label">Table #</label>
+              <input
+                type="number"
+                min="1"
+                className="form-input"
+                placeholder="e.g. 7"
+                value={newTableNumber}
+                onChange={e => setNewTableNumber(e.target.value)}
+                id="new-table-number"
+                required
+              />
+            </div>
+            <div className="form-group" style={{ flex: 1 }}>
+              <label className="form-label">Name (optional)</label>
+              <input
+                type="text"
+                className="form-input"
+                placeholder="e.g. Window Seat"
+                value={newTableName}
+                onChange={e => setNewTableName(e.target.value)}
+                id="new-table-name"
+              />
+            </div>
+            <div className="form-group" style={{ alignSelf: 'flex-end' }}>
+              <button type="submit" className="btn btn-primary" disabled={adding} id="add-table-btn">
+                {adding ? 'Adding...' : '+ Add'}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
       {/* Tables List */}
       <div className="tables-list">
@@ -141,14 +143,16 @@ export default function AdminTables() {
               >
                 🔗 Copy Link
               </button>
-              <button
-                className="btn btn-danger btn-sm"
-                onClick={() => handleDelete(table)}
-                disabled={processingId === table.id}
-                id={`delete-table-${table.id}`}
-              >
-                🗑️
-              </button>
+              {!isGuest && (
+                <button
+                  className="btn btn-danger btn-sm"
+                  onClick={() => handleDelete(table)}
+                  disabled={processingId === table.id}
+                  id={`delete-table-${table.id}`}
+                >
+                  🗑️
+                </button>
+              )}
             </div>
           </div>
         ))}

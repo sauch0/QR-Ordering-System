@@ -9,6 +9,7 @@ A modern, responsive, and seamless QR-code-based food ordering system designed f
 - **Real-Time Orders**: Monitor incoming orders in real-time as customers place them from their tables.
 - **Order Processing**: Track orders by table number, calculate totals instantly, mark bills as "Paid," or delete canceled orders.
 - **Session Control**: Secure admin access with the ability to clear inactive table sessions.
+- **Guest Mode**: A dedicated `/guest` route that automatically logs in a read-only user (using `guest@restaurant.com` with password `guestpassword`) so users can test the system safely without altering data.
 
 ### 🍽️ Customer Interface
 - **Frictionless Ordering**: No app download required. Customers simply scan a table-specific QR code to begin.

@@ -41,6 +41,10 @@ export default function AdminPage() {
 
   if (!user) return null;
 
+  if (user.email === 'guest@restaurant.com') {
+    return <Navigate to="/guest" replace />;
+  }
+
   return (
     <div className="admin-page">
       {/* Sidebar / Top nav */}

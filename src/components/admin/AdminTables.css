@@ -53,6 +53,11 @@
   min-width: 0;
 }
 
+.table-admin-info > div {
+  min-width: 0;
+  overflow: hidden;
+}
+
 .table-number-badge {
   width: 44px;
   height: 44px;
