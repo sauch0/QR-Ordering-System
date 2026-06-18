@@ -69,7 +69,9 @@ export default function AdminPaidOrders() {
                 <div className="order-card-header">
                   <div className="order-table-info">
                     <div>
-                      <h3 className="order-table-name">{order.table?.name}</h3>
+                      <h3 className="order-table-name">
+                        Order ID: {order.id.slice(0, 6)}
+                      </h3>
                       <p className="order-time">
                         Ordered: {new Date(order.created_at).toLocaleDateString()} {new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>

@@ -71,7 +71,7 @@ export default function AdminBilling() {
                 {/* Order Header */}
                 <div className="order-card-header">
                   <div className="order-table-info">
-                    <span className="order-table-icon">🪑</span>
+                    {/* <span className="order-table-icon">🪑</span> */}
                     <div>
                       <h3 className="order-table-name">{order.table?.name}</h3>
                       <p className="order-time">
@@ -105,13 +105,13 @@ export default function AdminBilling() {
                             {item.menu_item?.name}
                           </span>
                           {isRemoved && (
-                             <span className="badge badge-removed" style={{ marginLeft: '6px', padding: '2px 4px', fontSize: '10px' }}>Removed</span>
+                            <span className="badge badge-removed" style={{ marginLeft: '6px', padding: '2px 4px', fontSize: '10px' }}>Removed</span>
                           )}
                         </div>
                         <div className="order-item-right">
-                          <span style={{ 
-                            fontSize: '14px', 
-                            fontWeight: '600', 
+                          <span style={{
+                            fontSize: '14px',
+                            fontWeight: '600',
                             color: isRemoved ? 'var(--text-muted)' : 'var(--text-primary)',
                             textDecoration: isRemoved ? 'line-through' : 'none'
                           }}>
