@@ -74,6 +74,9 @@ export default function AdminBilling() {
                     {/* <span className="order-table-icon">🪑</span> */}
                     <div>
                       <h3 className="order-table-name">{order.table?.name}</h3>
+                      <h3 className="order-table-name" style={{ fontSize: '12px' }}>
+                        Order ID: {order.id.slice(0, 6)}
+                      </h3>
                       <p className="order-time">
                         {new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
