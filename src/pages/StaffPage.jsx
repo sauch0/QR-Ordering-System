@@ -10,12 +10,10 @@ import toast from 'react-hot-toast';
 import './AdminPage.css';
 
 const STAFF_EMAIL = import.meta.env.VITE_STAFF_EMAIL;
-const STAFF_PASSWORD = import.meta.env.VITE_STAFF_PASSWORD;
 
 export default function StaffPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [errorMsg, setErrorMsg] = useState('');
   const [waiterCalls, setWaiterCalls] = useState([]);
   const channelRef = useRef(null);
   const navigate = useNavigate();
@@ -27,49 +25,43 @@ export default function StaffPage() {
       .select('*, table:tables(name, table_number)')
       .eq('resolved', false)
       .order('created_at', { ascending: true });
-    if (!error) setWaiterCalls(data ?? []);
+
+    if (!error) {
+      setWaiterCalls(data ?? []);
+    }
   }, []);
 
   // ── Dismiss a waiter call ────────────────────────────────────
   async function dismissCall(callId) {
-    await supabase.from('waiter_calls').update({ resolved: true }).eq('id', callId);
+    await supabase
+      .from('waiter_calls')
+      .update({ resolved: true })
+      .eq('id', callId);
+
     setWaiterCalls(prev => prev.filter(c => c.id !== callId));
   }
 
-  // ── Auth + realtime subscription ─────────────────────────────
+  // ── Authentication Check ─────────────────────────────────────
   useEffect(() => {
     async function initStaff() {
-      // If the user explicitly logged out this session, don't auto-re-login
-      if (sessionStorage.getItem('staff_signed_out') === 'true') {
-        setLoading(false);
-        return;
-      }
-
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
       if (session?.user?.email === STAFF_EMAIL) {
         setUser(session.user);
-        setLoading(false);
-        return;
-      }
-
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: STAFF_EMAIL,
-        password: STAFF_PASSWORD,
-      });
-
-      if (error) {
-        setErrorMsg(`Staff login failed. Ensure ${STAFF_EMAIL} exists in Supabase Auth with the correct password set in VITE_STAFF_PASSWORD.`);
-        setLoading(false);
       } else {
-        setUser(data.session?.user);
-        setLoading(false);
+        setUser(null);
       }
+
+      setLoading(false);
     }
 
     initStaff();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user?.email === STAFF_EMAIL) {
         setUser(session.user);
       } else {
@@ -77,10 +69,12 @@ export default function StaffPage() {
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
-  // ── Realtime waiter-calls listener (after auth) ──────────────
+  // ── Realtime waiter-calls listener ───────────────────────────
   useEffect(() => {
     if (!user) return;
 
@@ -90,73 +84,79 @@ export default function StaffPage() {
       .channel('staff-waiter-calls')
       .on(
         'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'waiter_calls' },
-        async (payload) => {
-          // Fetch table name for the new call
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'waiter_calls',
+        },
+        async payload => {
           const { data: table } = await supabase
             .from('tables')
             .select('name, table_number')
             .eq('id', payload.new.table_id)
             .single();
 
-          const callWithTable = { ...payload.new, table };
+          const callWithTable = {
+            ...payload.new,
+            table,
+          };
+
           setWaiterCalls(prev => [...prev, callWithTable]);
 
-          toast(
-            `🔔 Waiter requested at ${table?.name ?? 'a table'}!`,
-            {
-              duration: 6000,
-              style: {
-                background: '#000000',
-                color: '#fff',
-                fontWeight: '700',
-                borderRadius: '12px',
-              },
-            }
-          );
+          toast(`🔔 Waiter requested at ${table?.name ?? 'a table'}!`, {
+            duration: 6000,
+            style: {
+              background: '#000000',
+              color: '#ffffff',
+              fontWeight: '700',
+              borderRadius: '12px',
+            },
+          });
         }
       )
       .on(
         'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'waiter_calls', filter: 'resolved=eq.true' },
-        (payload) => {
-          setWaiterCalls(prev => prev.filter(c => c.id !== payload.new.id));
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'waiter_calls',
+          filter: 'resolved=eq.true',
+        },
+        payload => {
+          setWaiterCalls(prev =>
+            prev.filter(call => call.id !== payload.new.id)
+          );
         }
       )
       .subscribe();
 
     return () => {
-      if (channelRef.current) supabase.removeChannel(channelRef.current);
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
+      }
     };
   }, [user, fetchWaiterCalls]);
 
+  // ── Sign Out ─────────────────────────────────────────────────
   async function handleLogout() {
-    sessionStorage.setItem('staff_signed_out', 'true'); // prevent auto-re-login on next visit
     await supabase.auth.signOut();
-    navigate('/login');
+    navigate('/login', { replace: true });
   }
 
+  // ── Loading Screen ───────────────────────────────────────────
   if (loading) {
     return (
       <div className="loading-screen">
         <div className="spinner" />
-        <p style={{ marginTop: '1rem', color: '#64748b' }}>Logging in as staff...</p>
+        <p style={{ marginTop: '1rem', color: '#64748b' }}>
+          Checking staff access...
+        </p>
       </div>
     );
   }
 
-  if (errorMsg) {
-    return (
-      <div className="loading-screen">
-        <div style={{ color: '#000000', textAlign: 'center', maxWidth: 400 }}>
-          <h3>Staff Access Error</h3>
-          <p>{errorMsg}</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user && !loading) {
+  // ── Protect Route ────────────────────────────────────────────
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
 
@@ -167,31 +167,78 @@ export default function StaffPage() {
           <div className="admin-brand">
             <span className="admin-brand-icon">🍽️</span>
             <span className="admin-brand-name">QR Ordering</span>
-            <span className="admin-brand-badge" style={{ backgroundColor: '#28c014ff', border: 'none', color: '#fff' }}>
+
+            <span
+              className="admin-brand-badge"
+              style={{
+                backgroundColor: '#28c014',
+                border: 'none',
+                color: '#fff',
+              }}
+            >
               Staff
             </span>
           </div>
 
           <nav className="admin-nav">
-            <NavLink to="/staff" end className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`} id="nav-orders">
+            <NavLink
+              to="/staff"
+              end
+              className={({ isActive }) =>
+                `admin-nav-link ${isActive ? 'active' : ''}`
+              }
+              id="nav-orders"
+            >
               Orders
             </NavLink>
-            <NavLink to="/staff/menu" className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`} id="nav-menu">
+
+            <NavLink
+              to="/staff/menu"
+              className={({ isActive }) =>
+                `admin-nav-link ${isActive ? 'active' : ''}`
+              }
+              id="nav-menu"
+            >
               Menu
             </NavLink>
-            <NavLink to="/staff/tables" className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`} id="nav-tables">
+
+            <NavLink
+              to="/staff/tables"
+              className={({ isActive }) =>
+                `admin-nav-link ${isActive ? 'active' : ''}`
+              }
+              id="nav-tables"
+            >
               Tables
             </NavLink>
-            <NavLink to="/staff/billing" className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`} id="nav-billing">
+
+            <NavLink
+              to="/staff/billing"
+              className={({ isActive }) =>
+                `admin-nav-link ${isActive ? 'active' : ''}`
+              }
+              id="nav-billing"
+            >
               Billing
             </NavLink>
-            <NavLink to="/staff/paid" className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`} id="nav-paid">
+
+            <NavLink
+              to="/staff/paid"
+              className={({ isActive }) =>
+                `admin-nav-link ${isActive ? 'active' : ''}`
+              }
+              id="nav-paid"
+            >
               Paid
             </NavLink>
           </nav>
 
-          <button className="btn btn-ghost btn-sm" onClick={handleLogout} id="logout-btn">
-            Exit
+          <button
+            className="btn btn-ghost btn-sm"
+            onClick={handleLogout}
+            id="logout-btn"
+          >
+            Sign Out
           </button>
         </div>
       </header>
@@ -202,9 +249,12 @@ export default function StaffPage() {
           {waiterCalls.map(call => (
             <div key={call.id} className="waiter-call-item">
               <span className="waiter-call-bell">🔔</span>
+
               <span className="waiter-call-text">
-                <strong>{call.table?.name ?? 'A table'}</strong> is calling for a waiter
+                <strong>{call.table?.name ?? 'A table'}</strong> is calling for
+                a waiter
               </span>
+
               <button
                 className="waiter-call-dismiss"
                 onClick={() => dismissCall(call.id)}
