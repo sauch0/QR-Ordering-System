@@ -30,12 +30,12 @@ function App() {
         <Route path="/table/:tableNumber" element={<CustomerPage />} />
 
         {/* Admin routes */}
-        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/login" element={<AdminLogin />} />
         <Route path="/admin/*" element={<AdminPage />} />
         <Route path="/staff/*" element={<StaffPage />} />
 
         {/* Redirects */}
-        <Route path="/" element={<Navigate to="/admin/login" replace />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
