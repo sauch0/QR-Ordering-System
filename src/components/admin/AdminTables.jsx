@@ -150,7 +150,7 @@ export default function AdminTables({ isGuest }) {
                   disabled={processingId === table.id}
                   id={`delete-table-${table.id}`}
                 >
-                  🗑️
+                  Remove
                 </button>
               )}
             </div>
