@@ -88,7 +88,7 @@ export default function OrderList({ onOrderPlaced }) {
                       onClick={() => handleRemoveItem(item.id)}
                       aria-label="Decrease quantity"
                     >
-                      -
+                      −
                     </button>
                     <span className="quantity-display">{item.quantity}</span>
                     <button
@@ -99,11 +99,11 @@ export default function OrderList({ onOrderPlaced }) {
                       +
                     </button>
                     <button
-                      className="remove-btn"
+                      className="remove-item-btn"
                       onClick={() => removeItem(item.id)}
                       aria-label="Remove item"
                     >
-                      ❌
+                      Remove
                     </button>
                   </div>
                 </div>
@@ -114,15 +114,14 @@ export default function OrderList({ onOrderPlaced }) {
             className="place-order-btn"
             onClick={handlePlaceOrder}
             disabled={isPlacing}
-            style={{ marginTop: '16px' }}
           >
-            {isPlacing ? 'Placing Order...' : 'Place Order'}
+            {isPlacing ? 'Placing Order...' : `Place Order · Rs.${cartItems.reduce((s, i) => s + i.unit_price * i.quantity, 0).toFixed(2)}`}
           </button>
         </div>
       )}
 
       {placedItems.length > 0 && (
-        <div className="order-section" style={{ marginTop: '32px' }}>
+        <div className="order-section placed-orders-section">
           <h2>Placed Orders</h2>
           <div className="order-items">
             {placedItems.map((item) => {
@@ -139,13 +138,13 @@ export default function OrderList({ onOrderPlaced }) {
                   <div className="order-item-content">
                     <div className="order-item-info">
                       <h3 className="order-item-name">{item.menu_item?.name ?? 'Item'}</h3>
-                      <span className={`badge badge-${item.status}`} style={{ display: 'inline-block', marginTop: '4px', fontSize: '12px', padding: '2px 6px', borderRadius: '4px', background: 'var(--bg-secondary)', color: 'var(--text-secondary)' }}>
+                      <span className={`order-status-badge status-${item.status}`}>
                         {STATUS_LABEL[item.status]}
                       </span>
                     </div>
-                    <div className="order-item-right" style={{ textAlign: 'right' }}>
-                      <span className="bill-item-qty" style={{ display: 'block', fontSize: '14px', color: 'var(--text-secondary)' }}>×{item.quantity}</span>
-                      <span className="bill-item-price" style={{ fontWeight: 'bold', color: 'var(--text-primary)' }}>Rs.{subtotal.toFixed(2)}</span>
+                    <div className="order-item-pricing">
+                      <span className="order-item-qty-label">×{item.quantity}</span>
+                      <span className="order-item-subtotal">Rs.{subtotal.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
@@ -155,12 +154,12 @@ export default function OrderList({ onOrderPlaced }) {
         </div>
       )}
 
-      <div className="order-summary" style={{ marginTop: '24px', padding: '16px', background: 'var(--bg-card)', borderTop: '1px solid var(--border)', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div className="order-total" style={{ fontSize: '18px', fontWeight: 'bold' }}>
-          <span>Total: </span>
-          <span style={{ color: 'var(--accent)' }}>Rs.{getTotalAmount().toFixed(2)}</span>
+      <div className="order-summary-bar">
+        <div className="order-total-display">
+          <span>Total</span>
+          <span className="order-total-amount">Rs.{getTotalAmount().toFixed(2)}</span>
         </div>
-        <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0 }}>Pay at the counter.</p>
+        <p className="order-pay-note">Pay at the counter.</p>
       </div>
     </div>
   );

@@ -4,6 +4,8 @@ import { supabase } from '../lib/supabase';
 import AdminOrders from '../components/admin/AdminOrders';
 import AdminMenu from '../components/admin/AdminMenu';
 import AdminTables from '../components/admin/AdminTables';
+import AdminBilling from '../components/admin/AdminBilling';
+import AdminPaidOrders from '../components/admin/AdminPaidOrders';
 import './AdminPage.css';
 
 export default function AdminPage() {
@@ -58,13 +60,19 @@ export default function AdminPage() {
 
           <nav className="admin-nav">
             <NavLink to="/admin" end className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`} id="nav-orders">
-              📋 Orders
+              Orders
             </NavLink>
             <NavLink to="/admin/menu" className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`} id="nav-menu">
-              🍽️ Menu
+              Menu
             </NavLink>
             <NavLink to="/admin/tables" className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`} id="nav-tables">
-              🪑 Tables
+              Tables
+            </NavLink>
+            <NavLink to="/admin/billing" className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`} id="nav-billing">
+              Billing
+            </NavLink>
+            <NavLink to="/admin/paid" className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`} id="nav-paid">
+              Paid
             </NavLink>
           </nav>
 
@@ -80,6 +88,8 @@ export default function AdminPage() {
             <Route index element={<AdminOrders />} />
             <Route path="menu" element={<AdminMenu />} />
             <Route path="tables" element={<AdminTables />} />
+            <Route path="billing" element={<AdminBilling />} />
+            <Route path="paid" element={<AdminPaidOrders />} />
             <Route path="*" element={<Navigate to="/admin" replace />} />
           </Routes>
         </div>

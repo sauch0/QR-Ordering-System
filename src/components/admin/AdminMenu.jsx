@@ -219,7 +219,7 @@ export default function AdminMenu({ isGuest }) {
           {!isGuest && (
             <>
               <button className="btn btn-secondary" onClick={() => setShowCategoryModal(true)} id="manage-cats-btn">
-                📁 Manage Categories
+                Manage Categories
               </button>
               <button className="btn btn-primary" onClick={openAdd} id="add-item-btn">
                 + Add Item
@@ -234,13 +234,13 @@ export default function AdminMenu({ isGuest }) {
         <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && setShowCategoryModal(false)}>
           <div className="modal-card category-modal animate-fade-in-up">
             <div className="modal-header">
-              <h3>📁 Manage Categories</h3>
+              <h3>Manage Categories</h3>
               <button className="modal-close" onClick={() => { setShowCategoryModal(false); cancelCatEdit(); }}>✕</button>
             </div>
 
             {/* Category Form */}
             <form onSubmit={handleCatSubmit} className="category-form card">
-              <h4>{editCategory ? '✏️ Edit Category' : '➕ Add New Category'}</h4>
+              <h4>{editCategory ? 'Edit Category' : 'Add New Category'}</h4>
               <div className="category-form-fields">
                 <div className="form-group">
                   <label className="form-label">Name *</label>
@@ -309,7 +309,7 @@ export default function AdminMenu({ isGuest }) {
                           className="btn btn-secondary btn-sm"
                           onClick={() => startEditCategory(cat)}
                         >
-                          ✏️
+                          Edit
                         </button>
                         <button
                           type="button"
@@ -317,7 +317,7 @@ export default function AdminMenu({ isGuest }) {
                           onClick={() => handleCatDelete(cat)}
                           disabled={processingId === cat.id}
                         >
-                          🗑️
+                          Delete
                         </button>
                       </div>
                     </div>
@@ -467,14 +467,14 @@ export default function AdminMenu({ isGuest }) {
                               disabled={processingId === item.id}
                               id={`toggle-${item.id}`}
                             >
-                              {item.is_available ? '🙈 Hide' : '👁 Show'}
+                              {item.is_available ? 'Hide' : 'Show'}
                             </button>
                             <button
                               className="btn btn-secondary btn-sm"
                               onClick={() => openEdit(item)}
                               id={`edit-${item.id}`}
                             >
-                              ✏️ Edit
+                              Edit
                             </button>
                             <button
                               className="btn btn-danger btn-sm"
@@ -482,7 +482,7 @@ export default function AdminMenu({ isGuest }) {
                               disabled={processingId === item.id}
                               id={`delete-${item.id}`}
                             >
-                              🗑️
+                              Delete
                             </button>
                           </div>
                         )}
@@ -524,14 +524,14 @@ export default function AdminMenu({ isGuest }) {
                         disabled={processingId === item.id}
                         id={`toggle-${item.id}`}
                       >
-                        {item.is_available ? '🙈 Hide' : '👁 Show'}
+                        {item.is_available ? 'Hide' : 'Show'}
                       </button>
                       <button
                         className="btn btn-secondary btn-sm"
                         onClick={() => openEdit(item)}
                         id={`edit-${item.id}`}
                       >
-                        ✏️ Edit
+                        Edit
                       </button>
                       <button
                         className="btn btn-danger btn-sm"
@@ -539,7 +539,7 @@ export default function AdminMenu({ isGuest }) {
                         disabled={processingId === item.id}
                         id={`delete-${item.id}`}
                       >
-                        🗑️
+                        Delete
                       </button>
                     </div>
                   )}

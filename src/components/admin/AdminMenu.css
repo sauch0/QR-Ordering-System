@@ -127,29 +127,28 @@
 
 /* Admin Menu Grid */
 .menu-admin-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
 .menu-admin-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   display: flex;
-  gap: 12px;
+  flex-direction: column;
   overflow: hidden;
   transition: all 0.2s;
-  padding-right: 14px;
 }
 
-.menu-admin-card:hover { border-color: var(--border-accent); }
+.menu-admin-card:hover { border-color: var(--border-accent); box-shadow: var(--shadow-md); }
 
 .menu-admin-card.unavailable { opacity: 0.5; }
 
 .menu-admin-img-wrap {
-  width: 80px;
-  height: 80px;
+  width: 100%;
+  height: 120px;
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -165,7 +164,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 12px 0;
+  padding: 12px;
   min-width: 0;
 }
 
@@ -204,7 +203,8 @@
 .menu-admin-actions {
   display: flex;
   gap: 6px;
-  margin-top: 4px;
+  margin-top: 8px;
+  flex-wrap: wrap;
 }
 
 /* Category Subtitle */
@@ -343,10 +343,11 @@
 
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 600px) {
-  .form-grid {
-    grid-template-columns: 1fr;
+  .menu-admin-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
-  
+
   .category-form-fields {
     grid-template-columns: 1fr;
   }
@@ -355,15 +356,12 @@
     padding: 16px;
   }
   
-  .menu-admin-card {
-    flex-direction: column;
-    padding: 12px;
-  }
-  
   .menu-admin-img-wrap {
-    width: 100%;
-    height: 140px;
-    border-radius: var(--radius-sm);
+    height: 100px;
+  }
+
+  .menu-admin-info {
+    padding: 10px;
   }
   
   .menu-admin-top {
@@ -372,13 +370,27 @@
     gap: 4px;
   }
   
+  .menu-admin-name {
+    font-size: 13px;
+  }
+  
   .menu-admin-price {
-    align-self: flex-start;
+    font-size: 13px;
+  }
+  
+  .menu-admin-desc {
+    display: none;
   }
   
   .menu-admin-actions {
-    margin-top: 10px;
-    justify-content: space-between;
+    margin-top: 8px;
+    flex-direction: column;
+  }
+  
+  .menu-admin-actions .btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
   }
 
   .admin-section-header {

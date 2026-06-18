@@ -4,6 +4,8 @@ import { supabase } from '../lib/supabase';
 import AdminOrders from '../components/admin/AdminOrders';
 import AdminMenu from '../components/admin/AdminMenu';
 import AdminTables from '../components/admin/AdminTables';
+import AdminBilling from '../components/admin/AdminBilling';
+import AdminPaidOrders from '../components/admin/AdminPaidOrders';
 import toast from 'react-hot-toast';
 import './AdminPage.css';
 
@@ -105,7 +107,7 @@ export default function StaffPage() {
             {
               duration: 6000,
               style: {
-                background: '#f97316',
+                background: '#000000',
                 color: '#fff',
                 fontWeight: '700',
                 borderRadius: '12px',
@@ -146,7 +148,7 @@ export default function StaffPage() {
   if (errorMsg) {
     return (
       <div className="loading-screen">
-        <div style={{ color: '#ef4444', textAlign: 'center', maxWidth: 400 }}>
+        <div style={{ color: '#000000', textAlign: 'center', maxWidth: 400 }}>
           <h3>Staff Access Error</h3>
           <p>{errorMsg}</p>
         </div>
@@ -163,20 +165,26 @@ export default function StaffPage() {
           <div className="admin-brand">
             <span className="admin-brand-icon">🍽️</span>
             <span className="admin-brand-name">QR Ordering</span>
-            <span className="admin-brand-badge" style={{ backgroundColor: '#10b981', border: 'none', color: '#fff' }}>
+            <span className="admin-brand-badge" style={{ backgroundColor: '#28c014ff', border: 'none', color: '#fff' }}>
               Staff
             </span>
           </div>
 
           <nav className="admin-nav">
             <NavLink to="/staff" end className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`} id="nav-orders">
-              📋 Orders
+              Orders
             </NavLink>
             <NavLink to="/staff/menu" className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`} id="nav-menu">
-              🍽️ Menu
+              Menu
             </NavLink>
             <NavLink to="/staff/tables" className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`} id="nav-tables">
-              🪑 Tables
+              Tables
+            </NavLink>
+            <NavLink to="/staff/billing" className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`} id="nav-billing">
+              Billing
+            </NavLink>
+            <NavLink to="/staff/paid" className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`} id="nav-paid">
+              Paid
             </NavLink>
           </nav>
 
@@ -213,6 +221,8 @@ export default function StaffPage() {
             <Route index element={<AdminOrders isGuest={true} />} />
             <Route path="menu" element={<AdminMenu isGuest={true} />} />
             <Route path="tables" element={<AdminTables isGuest={true} />} />
+            <Route path="billing" element={<AdminBilling />} />
+            <Route path="paid" element={<AdminPaidOrders />} />
             <Route path="*" element={<Navigate to="/staff" replace />} />
           </Routes>
         </div>

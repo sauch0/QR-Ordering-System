@@ -46,10 +46,10 @@ export default function TableHeader({ table }) {
               <span>🔔 Call Waiter</span>
             )}
           </button>
-          <div className="restaurant-badge">
+          {/* <div className="restaurant-badge">
             <span>🍽️</span>
             <span>QR Ordering</span>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@
 }
 
 .order-list h2 {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   margin-bottom: 16px;
   color: var(--text-primary);
@@ -19,11 +19,6 @@
   color: var(--text-secondary);
 }
 
-.order-list-empty .empty-state-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
-}
-
 .order-list-empty h3 {
   font-size: 18px;
   font-weight: 600;
@@ -31,16 +26,27 @@
   color: var(--text-primary);
 }
 
+/* ── Order Sections ─────────────────────────────────────────── */
+.order-section {
+  margin-bottom: 16px;
+}
+
+.placed-orders-section {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Order Items ────────────────────────────────────────────── */
 .order-items {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 .order-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 12px;
   background: var(--bg-elevated);
@@ -50,11 +56,12 @@
 }
 
 .order-item-img {
-  width: 60px;
-  height: 60px;
+  width: 56px;
+  height: 56px;
   border-radius: 8px;
   object-fit: cover;
   background: var(--bg-secondary);
+  flex-shrink: 0;
 }
 
 .order-item-content {
@@ -66,23 +73,35 @@
   flex-wrap: wrap;
 }
 
-.order-item-info h3 {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 4px;
+/* ── Item Info (name & price) ───────────────────────────────── */
+.order-item-info {
+  flex: 1;
+  min-width: 0;
 }
 
-.order-item-info p {
+.order-item-info h3,
+.order-item-info .order-item-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 2px 0;
+  line-height: 1.3;
+}
+
+.order-item-info p,
+.order-item-info .order-item-price {
   font-size: 14px;
+  font-weight: 600;
   color: var(--text-secondary);
   margin: 0;
 }
 
+/* ── Quantity Controls ──────────────────────────────────────── */
 .order-item-controls {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .quantity-btn {
@@ -90,9 +109,9 @@
   height: 32px;
   border-radius: 50%;
   background: var(--bg-card);
-  border: 1px solid var(--border-accent);
+  border: 1.5px solid var(--border-accent, var(--border));
   color: var(--text-primary);
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   cursor: pointer;
   display: flex;
@@ -103,24 +122,55 @@
 
 .quantity-btn:hover {
   background: var(--bg-secondary);
+  border-color: var(--text-primary);
+}
+
+.quantity-btn:active {
+  transform: scale(0.92);
 }
 
 .quantity-display {
-  min-width: 32px;
+  min-width: 28px;
   text-align: center;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-primary);
 }
 
-.remove-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.2);
+/* ── Remove Button ──────────────────────────────────────────── */
+.remove-item-btn {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1.5px solid #ef4444;
   color: #ef4444;
-  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.remove-item-btn:hover {
+  background: #ef4444;
+  color: #fff;
+}
+
+.remove-item-btn:active {
+  transform: scale(0.95);
+}
+
+/* Legacy remove-btn override */
+.remove-btn {
+  width: auto;
+  height: auto;
+  border-radius: 6px;
+  background: transparent;
+  border: 1.5px solid #ef4444;
+  color: #ef4444;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -129,40 +179,113 @@
 }
 
 .remove-btn:hover {
-  background: rgba(239, 68, 68, 0.2);
+  background: #ef4444;
+  color: #fff;
 }
 
-.order-summary {
-  border-top: 1px solid var(--border);
-  padding-top: 20px;
+/* ── Status Badges (Placed Orders) ──────────────────────────── */
+.order-status-badge {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
 }
 
-.order-total {
+.status-pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.status-preparing {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.status-served {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-removed {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ── Pricing (placed orders right side) ─────────────────────── */
+.order-item-pricing {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.order-item-qty-label {
+  display: block;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.order-item-subtotal {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+/* ── Summary Bar ────────────────────────────────────────────── */
+.order-summary-bar {
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 12px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.order-total-display {
   font-size: 18px;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 20px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
+.order-total-amount {
+  color: var(--accent, #000);
+  font-weight: 800;
+}
+
+.order-pay-note {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ── Place Order Button ─────────────────────────────────────── */
 .place-order-btn {
   width: 100%;
-  padding: 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 14px 20px;
+  background: #000000;
   border: none;
   border-radius: 12px;
   color: white;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  margin-top: 12px;
+  letter-spacing: 0.3px;
 }
 
 .place-order-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
 }
 
 .place-order-btn:active {
@@ -170,7 +293,32 @@
 }
 
 .place-order-btn:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
   transform: none;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .order-list {
+    padding: 16px;
+  }
+
+  .order-item-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .order-item-pricing {
+    text-align: left;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  
+  .order-item-controls {
+    width: 100%;
+    justify-content: flex-start;
+  }
 }

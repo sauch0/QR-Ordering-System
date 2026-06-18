@@ -71,7 +71,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: linear-gradient(135deg, #f97316, #ea580c);
+  background: #000000;
   color: #fff;
   font-weight: 700;
   font-size: 13px;
@@ -79,14 +79,14 @@
   border-radius: var(--radius-md);
   border: none;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
   white-space: nowrap;
 }
 
 .call-waiter-btn:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.5);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
 }
 
 .call-waiter-btn:active:not(:disabled) {
@@ -102,7 +102,7 @@
 }
 
 .call-waiter-btn.cooldown {
-  background: #10b981;
+  background: #333333;
   opacity: 1;
 }
 

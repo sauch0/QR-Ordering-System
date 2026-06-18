@@ -134,11 +134,30 @@ export async function getAllOpenOrders() {
       )
     `)
     .eq('status', 'open')
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: true });
   if (error) throw error;
   return data;
 }
 
+/**
+ * Get all paid orders (for paid orders page).
+ */
+export async function getPaidOrders() {
+  const { data, error } = await supabase
+    .from('orders')
+    .select(`
+      *,
+      table:tables(id, table_number, name),
+      order_items(
+        *,
+        menu_item:menu_items(id, name, price, image_url)
+      )
+    `)
+    .eq('status', 'paid')
+    .order('paid_at', { ascending: false });
+  if (error) throw error;
+  return data;
+}
 /**
  * Get all orders (open + paid) for admin history.
  */

@@ -95,111 +95,95 @@ export default function AdminOrders() {
     );
   }
 
+  const allItems = [];
+  orders.forEach((order) => {
+    // Only show items that need kitchen attention (pending or preparing)
+    const activeItems = order.order_items?.filter(i => i.status !== 'removed' && i.status !== 'served') ?? [];
+    activeItems.forEach((item) => {
+      allItems.push({
+        ...item,
+        order_id: order.id,
+        table_name: order.table?.name,
+        total_amount: order.total_amount,
+        item_created_at: item.created_at || order.created_at
+      });
+    });
+  });
+
+  // Sort items FIFO (oldest first)
+  allItems.sort((a, b) => new Date(a.item_created_at) - new Date(b.item_created_at));
+
   return (
     <div className="admin-orders">
       <div className="admin-section-header">
         <div>
           <h2>Live Orders</h2>
-          <p className="admin-section-sub">{orders.length} active table{orders.length !== 1 ? 's' : ''} ordering</p>
+          <p className="admin-section-sub">{allItems.length} items to prepare</p>
         </div>
         <button className="btn btn-ghost btn-sm" onClick={refresh} id="refresh-orders-btn">
-          🔄 Refresh
+          Refresh
         </button>
       </div>
 
-      {orders.length === 0 ? (
+      {allItems.length === 0 ? (
         <div className="empty-state" style={{ marginTop: 48 }}>
           <div className="empty-state-icon">🎉</div>
           <h3>No active orders</h3>
           <p>All clear! Orders will appear here in real-time.</p>
         </div>
       ) : (
-        <div className="orders-grid">
-          {orders.map((order) => {
-            const activeItems = order.order_items?.filter(i => i.status !== 'removed') ?? [];
-            const isProcessing = processingId === order.id;
-
+        <div className="orders-list">
+          {allItems.map((item) => {
+            const isProcessing = processingId === item.id || processingId === item.order_id;
             return (
-              <div key={order.id} className="order-card animate-fade-in-up">
-                {/* Order Header */}
-                <div className="order-card-header">
-                  <div className="order-table-info">
-                    <span className="order-table-icon">🪑</span>
-                    <div>
-                      <h3 className="order-table-name">{order.table?.name}</h3>
-                      <p className="order-time">
-                        {new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </p>
-                    </div>
+              <div key={item.id} className="order-item-card animate-fade-in-up" style={{
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border)',
+                borderRadius: '8px',
+                padding: '16px',
+                marginBottom: '12px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '12px'
+              }}>
+                <div style={{ flex: 1, minWidth: '200px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                    <span className="badge" style={{ background: '#000', color: '#fff' }}>
+                      {item.table_name}
+                    </span>
+                    <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                      {new Date(item.item_created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
                   </div>
-                  <div className="order-card-actions">
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDeleteOrder(order.id)}
-                      disabled={isProcessing}
-                      id={`delete-order-${order.id}`}
-                      title="Delete order"
-                    >
-                      🗑️
-                    </button>
-                    <button
-                      className="btn btn-success btn-sm"
-                      onClick={() => handleMarkPaid(order.id)}
-                      disabled={isProcessing}
-                      id={`pay-order-${order.id}`}
-                    >
-                      {isProcessing ? '...' : '✅ Paid'}
-                    </button>
+                  <div style={{ fontSize: '16px', fontWeight: '600' }}>
+                    {item.quantity}x {item.menu_item?.name}
                   </div>
+                  {item.notes && <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginTop: '4px' }}>Note: {item.notes}</div>}
                 </div>
 
-                <div className="divider" style={{ margin: '8px 0' }} />
-
-                {/* Order Items */}
-                <div className="order-items-list">
-                  {order.order_items?.map((item) => (
-                    <div key={item.id} className={`order-item-row ${item.status === 'removed' ? 'removed' : ''}`}>
-                      <div className="order-item-info">
-                        <span className="order-item-qty">×{item.quantity}</span>
-                        <span className="order-item-name">{item.menu_item?.name}</span>
-                      </div>
-                      <div className="order-item-right">
-                        <span className={`badge ${STATUS_COLORS[item.status]}`}>{item.status}</span>
-                        {item.status !== 'removed' && (
-                          <>
-                            {STATUS_NEXT[item.status] && (
-                              <button
-                                className="btn btn-secondary btn-sm"
-                                onClick={() => handleAdvanceStatus(item)}
-                                disabled={processingId === item.id}
-                                id={`advance-${item.id}`}
-                                title={`Mark as ${STATUS_NEXT[item.status]}`}
-                              >
-                                ▶
-                              </button>
-                            )}
-                            <button
-                              className="btn btn-danger btn-sm"
-                              onClick={() => handleRemoveItem(item.id)}
-                              disabled={processingId === item.id}
-                              id={`remove-item-${item.id}`}
-                              title="Remove item (can't prepare)"
-                            >
-                              ✕
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="divider" style={{ margin: '8px 0' }} />
-
-                {/* Total */}
-                <div className="order-total-row">
-                  <span className="order-items-count">{activeItems.length} item{activeItems.length !== 1 ? 's' : ''}</span>
-                  <span className="order-total">Rs.{parseFloat(order.total_amount || 0).toFixed(2)}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span className={`badge ${STATUS_COLORS[item.status]}`}>{item.status}</span>
+                  
+                  {STATUS_NEXT[item.status] && (
+                    <button
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => handleAdvanceStatus(item)}
+                      disabled={isProcessing}
+                      title={`Mark as ${STATUS_NEXT[item.status]}`}
+                    >
+                      {STATUS_NEXT[item.status].charAt(0).toUpperCase() + STATUS_NEXT[item.status].slice(1)}
+                    </button>
+                  )}
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handleRemoveItem(item.id)}
+                    disabled={isProcessing}
+                    title="Remove item"
+                  >
+                    Remove
+                  </button>
                 </div>
               </div>
             );

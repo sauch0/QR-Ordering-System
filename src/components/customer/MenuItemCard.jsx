@@ -2,8 +2,8 @@ import './MenuItemCard.css';
 
 export default function MenuItemCard({ item, onAdd, onView, loading, style, quantity = 1, onQuantityChange }) {
   return (
-    <div 
-      className="menu-item-card animate-fade-in-up" 
+    <div
+      className="menu-item-card animate-fade-in-up"
       style={style}
       onClick={onView}
       role="button"
