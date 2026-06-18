@@ -98,32 +98,34 @@ export default function AdminBilling() {
 
                 {/* Order Items */}
                 <div className="order-items-list">
-                  {allItems.map((item) => {
-                    const isRemoved = item.status === 'removed';
-                    return (
-                      <div key={item.id} className={`order-item-row ${isRemoved ? 'removed' : ''}`}>
-                        <div className="order-item-info">
-                          <span className="order-item-qty">×{item.quantity}</span>
-                          <span className="order-item-name" style={isRemoved ? { textDecoration: 'line-through', color: 'var(--text-muted)' } : {}}>
-                            {item.menu_item?.name}
-                          </span>
-                          {isRemoved && (
-                            <span className="badge badge-removed" style={{ marginLeft: '6px', padding: '2px 4px', fontSize: '10px' }}>Removed</span>
-                          )}
+                  {allItems
+                    .filter(item => item.status !== 'removed')
+                    .map((item) => {
+                      const isRemoved = item.status === 'removed';
+                      return (
+                        <div key={item.id} className={`order-item-row ${isRemoved ? 'removed' : ''}`}>
+                          <div className="order-item-info">
+                            <span className="order-item-qty">×{item.quantity}</span>
+                            <span className="order-item-name" style={isRemoved ? { textDecoration: 'line-through', color: 'var(--text-muted)' } : {}}>
+                              {item.menu_item?.name}
+                            </span>
+                            {isRemoved && (
+                              <span className="badge badge-removed" style={{ marginLeft: '6px', padding: '2px 4px', fontSize: '10px' }}>Removed</span>
+                            )}
+                          </div>
+                          <div className="order-item-right">
+                            <span style={{
+                              fontSize: '14px',
+                              fontWeight: '600',
+                              color: isRemoved ? 'var(--text-muted)' : 'var(--text-primary)',
+                              textDecoration: isRemoved ? 'line-through' : 'none'
+                            }}>
+                              Rs.{(item.quantity * item.unit_price).toFixed(2)}
+                            </span>
+                          </div>
                         </div>
-                        <div className="order-item-right">
-                          <span style={{
-                            fontSize: '14px',
-                            fontWeight: '600',
-                            color: isRemoved ? 'var(--text-muted)' : 'var(--text-primary)',
-                            textDecoration: isRemoved ? 'line-through' : 'none'
-                          }}>
-                            Rs.{(item.quantity * item.unit_price).toFixed(2)}
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
                 </div>
 
                 <div className="divider" style={{ margin: '8px 0' }} />

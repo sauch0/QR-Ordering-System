@@ -88,22 +88,23 @@ export default function AdminPaidOrders() {
                 <div className="divider" style={{ margin: '8px 0' }} />
 
                 <div className="order-items-list">
-                  {allItems.map((item) => {
-                    const isRemoved = item.status === 'removed';
-                    return (
-                      <div key={item.id} className={`order-item-row ${isRemoved ? 'removed' : ''}`}>
-                        <div className="order-item-info">
-                          <span className="order-item-qty">×{item.quantity}</span>
-                          <span className="order-item-name" style={isRemoved ? { textDecoration: 'line-through', color: 'var(--text-muted)' } : {}}>
-                            {item.menu_item?.name}
-                          </span>
-                        </div>
-                        {/* <div className="order-item-right">
+                  {allItems
+                    .filter(item => item.status !== 'removed')
+                    .map((item) => {
+                      return (
+                        <div key={item.id} className={`order-item-row`}>
+                          <div className="order-item-info">
+                            <span className="order-item-qty">×{item.quantity}</span>
+                            <span className="order-item-name">
+                              {item.menu_item?.name}
+                            </span>
+                          </div>
+                          {/* <div className="order-item-right">
                           <span className={`badge ${isRemoved ? 'badge-removed' : 'badge-served'}`}>{item.status}</span>
                         </div> */}
-                      </div>
-                    );
-                  })}
+                        </div>
+                      );
+                    })}
                 </div>
 
                 <div className="divider" style={{ margin: '8px 0' }} />
