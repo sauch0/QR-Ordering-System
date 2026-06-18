@@ -130,7 +130,7 @@
 
 /* ── Waiter Call Notification Bar ───────────────────────────── */
 .waiter-call-bar {
-  background: #000000;
+  background: #30c71c;
   padding: 0 16px;
   display: flex;
   flex-direction: column;
