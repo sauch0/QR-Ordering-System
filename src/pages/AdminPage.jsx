@@ -17,12 +17,12 @@ export default function AdminPage() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       setLoading(false);
-      if (!session) navigate('/admin/login', { replace: true });
+      if (!session) navigate('/login', { replace: true });
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
-      if (!session) navigate('/admin/login', { replace: true });
+      if (!session) navigate('/login', { replace: true });
     });
 
     return () => subscription.unsubscribe();
@@ -30,7 +30,7 @@ export default function AdminPage() {
 
   async function handleLogout() {
     await supabase.auth.signOut();
-    navigate('/admin/login');
+    navigate('/login');
   }
 
   if (loading) {

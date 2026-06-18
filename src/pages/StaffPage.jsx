@@ -133,7 +133,7 @@ export default function StaffPage() {
   async function handleLogout() {
     sessionStorage.setItem('staff_signed_out', 'true'); // prevent auto-re-login on next visit
     await supabase.auth.signOut();
-    navigate('/admin/login');
+    navigate('/login');
   }
 
   if (loading) {
@@ -156,7 +156,9 @@ export default function StaffPage() {
     );
   }
 
-  if (!user) return null;
+  if (!user && !loading) {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
     <div className="admin-page">
