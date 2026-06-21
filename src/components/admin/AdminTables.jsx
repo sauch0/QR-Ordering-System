@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getTables, createTable, deleteTable, updateTable } from '../../services/tableService';
+import { QRCodeCanvas } from 'qrcode.react';
 import toast from 'react-hot-toast';
 import './AdminTables.css';
 
@@ -10,6 +11,7 @@ export default function AdminTables({ isGuest }) {
   const [newTableName, setNewTableName] = useState('');
   const [adding, setAdding] = useState(false);
   const [processingId, setProcessingId] = useState(null);
+  const [selectedQrTable, setSelectedQrTable] = useState(null);
 
   async function loadTables() {
     try {
@@ -66,6 +68,18 @@ export default function AdminTables({ isGuest }) {
     navigator.clipboard.writeText(getQrUrl(table))
       .then(() => toast.success('Link copied!'))
       .catch(() => toast.error('Failed to copy'));
+  }
+
+  function downloadQrCode(table) {
+    const canvas = document.getElementById(`qr-canvas-${table.id}`);
+    if (!canvas) return;
+    const pngUrl = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
+    let downloadLink = document.createElement('a');
+    downloadLink.href = pngUrl;
+    downloadLink.download = `table-${table.table_number}-qr.png`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
   }
 
   if (loading) {
@@ -136,6 +150,12 @@ export default function AdminTables({ isGuest }) {
             </div>
             <div className="table-admin-actions">
               <button
+                className="btn btn-primary btn-sm"
+                onClick={() => setSelectedQrTable(table)}
+              >
+                View QR
+              </button>
+              <button
                 className="btn btn-secondary btn-sm"
                 onClick={() => copyQrLink(table)}
                 id={`copy-link-${table.id}`}
@@ -176,6 +196,32 @@ export default function AdminTables({ isGuest }) {
           <li>Customers scan → order food → see their bill in real-time</li>
         </ol>
       </div>
+      {/* QR Code Modal */}
+      {selectedQrTable && (
+        <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && setSelectedQrTable(null)}>
+          <div className="modal-card qr-modal animate-fade-in-up">
+            <div className="modal-header">
+              <h3>{selectedQrTable.name} QR Code</h3>
+              <button className="modal-close" onClick={() => setSelectedQrTable(null)}>✕</button>
+            </div>
+            <div className="qr-modal-body">
+              <div className="qr-code-wrapper">
+                <QRCodeCanvas 
+                  id={`qr-canvas-${selectedQrTable.id}`}
+                  value={getQrUrl(selectedQrTable)} 
+                  size={200}
+                  level="H"
+                  includeMargin={true}
+                />
+              </div>
+              <p className="qr-hint">Scan to view the menu</p>
+              <button className="btn btn-primary btn-lg" onClick={() => downloadQrCode(selectedQrTable)}>
+                Download QR (PNG)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

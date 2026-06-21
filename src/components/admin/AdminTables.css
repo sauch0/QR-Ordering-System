@@ -132,6 +132,32 @@
   color: var(--accent-light);
 }
 
+/* QR Modal Styles */
+.qr-modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  gap: 16px;
+  text-align: center;
+}
+
+.qr-code-wrapper {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  margin-bottom: 8px;
+}
+
+.qr-hint {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 600px) {
   .table-admin-card {
