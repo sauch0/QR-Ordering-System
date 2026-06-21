@@ -61,6 +61,13 @@
   gap: 4px;
   flex: 1;
   justify-content: center;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.admin-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .admin-nav-link {
@@ -113,14 +120,25 @@
     display: none;
   }
 
+  .admin-brand-icon {
+    display: none;
+  }
+
+  .admin-nav {
+    justify-content: flex-start;
+    gap: 2px;
+  }
+
   .admin-nav-link {
-    font-size: 12px;
+    font-size: 11px;
     padding: 6px 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .admin-header-inner {
     gap: 8px;
-    padding: 0 12px;
+    padding: 0 8px;
   }
 
   .admin-main {

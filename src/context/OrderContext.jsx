@@ -43,9 +43,9 @@ export function OrderProvider({ tableId, children }) {
           setOrder(updated);
           // If the order was marked paid by the admin, expire the customer's session
           if (updated && updated.status === 'paid') {
-            Object.keys(sessionStorage).forEach(key => {
-              if (key.startsWith('table_scanned_')) {
-                sessionStorage.removeItem(key);
+            Object.keys(localStorage).forEach(key => {
+              if (key.startsWith('table_auth_')) {
+                localStorage.removeItem(key);
               }
             });
             window.location.reload();
@@ -54,9 +54,9 @@ export function OrderProvider({ tableId, children }) {
         .catch(err => {
           console.error(err);
           // If the order was deleted (or not found), expire session and reload
-          Object.keys(sessionStorage).forEach(key => {
-            if (key.startsWith('table_scanned_')) {
-              sessionStorage.removeItem(key);
+          Object.keys(localStorage).forEach(key => {
+            if (key.startsWith('table_auth_')) {
+              localStorage.removeItem(key);
             }
           });
           window.location.reload();
@@ -139,9 +139,9 @@ export function OrderProvider({ tableId, children }) {
     await markOrderAsPaid(order.id);
     const updated = await getOrderById(order.id);
     setOrder(updated);
-    Object.keys(sessionStorage).forEach(key => {
-      if (key.startsWith('table_scanned_')) {
-        sessionStorage.removeItem(key);
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith('table_auth_')) {
+        localStorage.removeItem(key);
       }
     });
   }, [order?.id]);

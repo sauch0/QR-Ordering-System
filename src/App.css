@@ -128,13 +128,14 @@ a { text-decoration: none; color: inherit; }
 .btn-primary:active { transform: translateY(0); }
 
 .btn-secondary {
-  background: rgba(0, 0, 0, 0.05);
-  color: #000000;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: var(--secondary);
+  color: #fff;
+  border: none;
 }
 .btn-secondary:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: var(--secondary-light);
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .btn-ghost {
@@ -148,23 +149,25 @@ a { text-decoration: none; color: inherit; }
 }
 
 .btn-danger {
-  background: rgba(239, 68, 68, 0.15);
-  color: var(--danger-light);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: var(--danger);
+  color: #fff;
+  border: none;
 }
 .btn-danger:hover {
-  background: rgba(239, 68, 68, 0.25);
+  background: var(--danger-light);
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
 .btn-success {
-  background: rgba(16, 185, 129, 0.15);
-  color: var(--success-light);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: var(--success);
+  color: #fff;
+  border: none;
 }
 .btn-success:hover {
-  background: rgba(16, 185, 129, 0.25);
+  background: var(--success-light);
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .btn-sm {

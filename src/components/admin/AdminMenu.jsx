@@ -218,7 +218,7 @@ export default function AdminMenu({ isGuest }) {
         <div className="admin-header-buttons">
           {!isGuest && (
             <>
-              <button className="btn btn-secondary" onClick={() => setShowCategoryModal(true)} id="manage-cats-btn">
+              <button className="btn btn-primary" onClick={() => setShowCategoryModal(true)} id="manage-cats-btn">
                 Manage Categories
               </button>
               <button className="btn btn-primary" onClick={openAdd} id="add-item-btn">
@@ -251,6 +251,8 @@ export default function AdminMenu({ isGuest }) {
                     value={catForm.name}
                     onChange={handleCatChange}
                     required
+                    maxLength={50}
+                    id="cat-name-input"
                   />
                 </div>
                 <div className="form-group">
@@ -349,6 +351,7 @@ export default function AdminMenu({ isGuest }) {
                     value={form.name}
                     onChange={handleChange}
                     required
+                    maxLength={50}
                     id="item-name-input"
                   />
                 </div>
@@ -360,6 +363,7 @@ export default function AdminMenu({ isGuest }) {
                     type="number"
                     step="0.01"
                     min="0"
+                    max="100000"
                     className="form-input"
                     placeholder="0.00"
                     value={form.price}
@@ -377,9 +381,10 @@ export default function AdminMenu({ isGuest }) {
                   className="form-select"
                   value={form.categoryId}
                   onChange={handleChange}
+                  required
                   id="item-category-select"
                 >
-                  <option value="">No category</option>
+                  <option value="" disabled>Select a category...</option>
                   {categories.map(cat => (
                     <option key={cat.id} value={cat.id}>{cat.name}</option>
                   ))}
@@ -393,6 +398,7 @@ export default function AdminMenu({ isGuest }) {
                   className="form-input"
                   placeholder="Short description..."
                   rows={2}
+                  maxLength={250}
                   value={form.description}
                   onChange={handleChange}
                   id="item-desc-input"

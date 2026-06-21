@@ -158,6 +158,30 @@ export async function getPaidOrders() {
   if (error) throw error;
   return data;
 }
+
+/**
+ * Get today's paid orders (for dashboard sales stats).
+ */
+export async function getTodaysPaidOrders() {
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+
+  const { data, error } = await supabase
+    .from('orders')
+    .select(`
+      *,
+      table:tables(id, table_number, name),
+      order_items(
+        *,
+        menu_item:menu_items(id, name, price, image_url)
+      )
+    `)
+    .eq('status', 'paid')
+    .gte('paid_at', todayStart.toISOString())
+    .order('paid_at', { ascending: false });
+  if (error) throw error;
+  return data;
+}
 /**
  * Get all orders (open + paid) for admin history.
  */

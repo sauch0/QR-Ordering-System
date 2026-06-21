@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import CustomerPage from './pages/CustomerPage';
 import AdminPage from './pages/AdminPage';
+import QrRedirect from './pages/QrRedirect';
 import AdminLogin from './pages/AdminLogin';
 import StaffPage from './pages/StaffPage';
 import NotFound from './pages/NotFound';
@@ -27,7 +28,8 @@ function App() {
       />
       <Routes>
         {/* Customer routes */}
-        <Route path="/table/:tableNumber" element={<CustomerPage />} />
+        <Route path="/qr/:tableId" element={<QrRedirect />} />
+        <Route path="/table/:tableId" element={<CustomerPage />} />
 
         {/* Admin routes */}
         <Route path="/login" element={<AdminLogin />} />

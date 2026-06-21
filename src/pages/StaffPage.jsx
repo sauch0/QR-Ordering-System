@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { Routes, Route, NavLink, Navigate, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import AdminOrders from '../components/admin/AdminOrders';
+import AdminDashboard from '../components/admin/AdminDashboard';
 import AdminMenu from '../components/admin/AdminMenu';
 import AdminTables from '../components/admin/AdminTables';
 import AdminBilling from '../components/admin/AdminBilling';
@@ -187,9 +187,9 @@ export default function StaffPage() {
               className={({ isActive }) =>
                 `admin-nav-link ${isActive ? 'active' : ''}`
               }
-              id="nav-orders"
+              id="nav-dashboard"
             >
-              Orders
+              Dashboard
             </NavLink>
 
             <NavLink
@@ -270,7 +270,7 @@ export default function StaffPage() {
       <main className="admin-main">
         <div className="admin-container">
           <Routes>
-            <Route index element={<AdminOrders isGuest={true} />} />
+            <Route index element={<AdminDashboard />} />
             <Route path="menu" element={<AdminMenu isGuest={true} />} />
             <Route path="tables" element={<AdminTables isGuest={true} />} />
             <Route path="billing" element={<AdminBilling />} />

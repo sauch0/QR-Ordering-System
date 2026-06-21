@@ -59,7 +59,7 @@ export default function AdminTables({ isGuest }) {
   // Generate QR URL
   function getQrUrl(table) {
     const baseUrl = window.location.origin;
-    return `${baseUrl}/table/${table.table_number}?scan=true`;
+    return `${baseUrl}/qr/${table.id}`;
   }
 
   function copyQrLink(table) {
