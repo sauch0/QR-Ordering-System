@@ -145,7 +145,7 @@ export default function AdminDashboard() {
           </div>
           <div className="stat-content">
             <span className="stat-value">{pendingCount}</span>
-            <span className="stat-label">Pending</span>
+            <span className="stat-label">Pending Orders</span>
           </div>
         </div>
 
@@ -163,7 +163,7 @@ export default function AdminDashboard() {
 
         <div className="stat-card stat-card-highlight" id="stat-sales">
           <div className="stat-icon stat-icon-sales">
-            <span style={{ fontSize: '18px', fontWeight: '800' }}>Rs.</span>
+            <span style={{ fontSize: '18px', fontWeight: '800' }}>रु</span>
           </div>
           <div className="stat-content">
             <span className="stat-value">Rs.{todayStats.sales.toFixed(0)}</span>
@@ -192,7 +192,7 @@ export default function AdminDashboard() {
 
         {liveItems.length === 0 ? (
           <div className="empty-state" style={{ marginTop: 32 }}>
-            <div className="empty-state-icon">🎉</div>
+            {/* <div className="empty-state-icon">🎉</div> */}
             <h3>All clear!</h3>
             <p>No items need attention right now.</p>
           </div>

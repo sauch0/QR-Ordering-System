@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useAdminOrders } from '../../hooks/useAdminOrders';
-import { markOrderAsPaid } from '../../services/orderService';
+import { markOrderAsPaid, removeOrderItem } from '../../services/orderService';
 import toast from 'react-hot-toast';
 import './AdminOrders.css';
 
 export default function AdminBilling() {
   const { orders, loading, error, refresh } = useAdminOrders();
   const [processingId, setProcessingId] = useState(null);
+  const [removingItemId, setRemovingItemId] = useState(null);
 
   async function handleMarkPaid(orderId) {
     if (!confirm('Mark this table as paid? This will close the order.')) return;
@@ -19,6 +20,20 @@ export default function AdminBilling() {
       toast.error('Failed to mark as paid');
     } finally {
       setProcessingId(null);
+    }
+  }
+
+  async function handleRemoveItem(orderId, itemId) {
+    if (!confirm('Are you sure you want to remove this item from the bill?')) return;
+    setRemovingItemId(itemId);
+    try {
+      await removeOrderItem(orderId, itemId);
+      toast.success('Item removed successfully');
+      refresh();
+    } catch {
+      toast.error('Failed to remove item');
+    } finally {
+      setRemovingItemId(null);
     }
   }
 
@@ -55,7 +70,6 @@ export default function AdminBilling() {
 
       {orders.length === 0 ? (
         <div className="empty-state" style={{ marginTop: 48 }}>
-          <div className="empty-state-icon">🎉</div>
           <h3>No unpaid tables</h3>
           <p>All active tables have paid their bills.</p>
         </div>
@@ -63,7 +77,8 @@ export default function AdminBilling() {
         <div className="orders-grid">
           {orders.map((order) => {
             const allItems = order.order_items || [];
-            const activeCount = allItems.filter(i => i.status !== 'removed').length;
+            const activeItems = allItems.filter(i => i.status !== 'removed');
+            const activeCount = activeItems.length;
             const isProcessing = processingId === order.id;
 
             return (
@@ -71,7 +86,6 @@ export default function AdminBilling() {
                 {/* Order Header */}
                 <div className="order-card-header">
                   <div className="order-table-info">
-                    {/* <span className="order-table-icon">🪑</span> */}
                     <div>
                       <h3 className="order-table-name">{order.table?.name}</h3>
                       <h3 className="order-table-name" style={{ fontSize: '12px' }}>
@@ -82,50 +96,42 @@ export default function AdminBilling() {
                       </p>
                     </div>
                   </div>
-                  <div className="order-card-actions">
-                    <button
-                      className="btn btn-success btn-sm"
-                      onClick={() => handleMarkPaid(order.id)}
-                      disabled={isProcessing}
-                      title="Mark entire table as paid"
-                    >
-                      {isProcessing ? 'Processing...' : 'Mark Paid'}
-                    </button>
-                  </div>
                 </div>
 
                 <div className="divider" style={{ margin: '8px 0' }} />
 
                 {/* Order Items */}
                 <div className="order-items-list">
-                  {allItems
-                    .filter(item => item.status !== 'removed')
-                    .map((item) => {
-                      const isRemoved = item.status === 'removed';
-                      return (
-                        <div key={item.id} className={`order-item-row ${isRemoved ? 'removed' : ''}`}>
-                          <div className="order-item-info">
-                            <span className="order-item-qty">×{item.quantity}</span>
-                            <span className="order-item-name" style={isRemoved ? { textDecoration: 'line-through', color: 'var(--text-muted)' } : {}}>
-                              {item.menu_item?.name}
-                            </span>
-                            {isRemoved && (
-                              <span className="badge badge-removed" style={{ marginLeft: '6px', padding: '2px 4px', fontSize: '10px' }}>Removed</span>
-                            )}
-                          </div>
-                          <div className="order-item-right">
-                            <span style={{
-                              fontSize: '14px',
-                              fontWeight: '600',
-                              color: isRemoved ? 'var(--text-muted)' : 'var(--text-primary)',
-                              textDecoration: isRemoved ? 'line-through' : 'none'
-                            }}>
-                              Rs.{(item.quantity * item.unit_price).toFixed(2)}
-                            </span>
-                          </div>
+                  {activeItems.map((item) => {
+                    const isItemRemoving = removingItemId === item.id;
+                    return (
+                      <div key={item.id} className="order-item-row">
+                        <div className="order-item-info">
+                          <span className="order-item-qty">×{item.quantity}</span>
+                          <span className="order-item-name">
+                            {item.menu_item?.name}
+                          </span>
                         </div>
-                      );
-                    })}
+                        <div className="order-item-right">
+                          <span style={{
+                            fontSize: '14px',
+                            fontWeight: '600',
+                            color: 'var(--text-primary)'
+                          }}>
+                            Rs.{(item.quantity * item.unit_price).toFixed(2)}
+                          </span>
+                          <button
+                            className="btn-item-delete"
+                            onClick={() => handleRemoveItem(order.id, item.id)}
+                            disabled={isItemRemoving}
+                            title="Remove item"
+                          >
+                            {isItemRemoving ? '...' : 'Remove'}
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
 
                 <div className="divider" style={{ margin: '8px 0' }} />
@@ -134,6 +140,18 @@ export default function AdminBilling() {
                 <div className="order-total-row">
                   <span className="order-items-count">{activeCount} active items</span>
                   <span className="order-total">Total: Rs.{parseFloat(order.total_amount || 0).toFixed(2)}</span>
+                </div>
+
+                {/* Bottom Order Actions */}
+                <div className="order-card-bottom-actions">
+                  <button
+                    className="btn btn-success btn-md bill-pay-btn"
+                    onClick={() => handleMarkPaid(order.id)}
+                    disabled={isProcessing}
+                    title="Mark entire table as paid"
+                  >
+                    {isProcessing ? 'Processing...' : 'Mark Paid'}
+                  </button>
                 </div>
               </div>
             );
