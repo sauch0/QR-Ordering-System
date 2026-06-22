@@ -120,14 +120,14 @@ export default function AdminBilling() {
                           }}>
                             Rs.{(item.quantity * item.unit_price).toFixed(2)}
                           </span>
-                          <button
+                          {/* <button
                             className="btn-item-delete"
                             onClick={() => handleRemoveItem(order.id, item.id)}
                             disabled={isItemRemoving}
                             title="Remove item"
                           >
                             {isItemRemoving ? '...' : 'Remove'}
-                          </button>
+                          </button> */}
                         </div>
                       </div>
                     );
