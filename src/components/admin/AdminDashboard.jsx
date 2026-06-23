@@ -132,7 +132,7 @@ export default function AdminDashboard() {
           </div>
           <div className="stat-content">
             <span className="stat-value">{orders.length}</span>
-            <span className="stat-label">Active Orders</span>
+            <span className="stat-label">Active Tables</span>
           </div>
         </div>
 
